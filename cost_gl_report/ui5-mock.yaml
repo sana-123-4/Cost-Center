@@ -1,0 +1,47 @@
+specVersion: "3.1"
+metadata:
+  name: costglrpt.costglreport
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+        backend:
+          - path: /sap
+            url: http://jcdevqasapp.jayfinechem.com:8001
+            client: "300"
+          - path: /sap
+            url: http://jcdevqasapp.jayfinechem.com:8001
+            client: "300"
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+    - name: fiori-tools-preview
+      afterMiddleware: fiori-tools-appreload
+      configuration:
+        component: costglrpt.costglreport
+        ui5Theme: sap_horizon
+    - name: sap-fe-mockserver
+      beforeMiddleware: csp
+      configuration:
+        mountPath: /
+        services:
+          - urlPath: /sap/opu/odata/sap/ZJI_FI_CASH_ODATA1_SRV
+            generateMockData: true
+            metadataXmlPath: ./webapp/localService/mainService/metadata.xml
+            mockdataRootPath: ./webapp/localService/data
+          - urlPath: /sap/opu/odata/sap/ZJI_GL_ACC_ODATA_SRV
+            metadataPath: ./webapp/localService/ZJI_GL_ACC_ODATA_SRV/metadata.xml
+            mockdataPath: ./webapp/localService/ZJI_GL_ACC_ODATA_SRV/mockdata
+            generateMockData: true
+        annotations: []

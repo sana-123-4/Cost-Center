@@ -1,0 +1,116 @@
+<mvc:View
+	controllerName="cashflow.cashflowrpt.controller.Detail"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+	displayBlock="true"
+	height="100%"
+	busyIndicatorDelay="0"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable"
+>
+<Page id="page1" title="{i18n>title}">
+<content>
+
+<ScrollContainer  width="100%" horizontal="true" vertical="true" focusable="true">
+<Table id="idTable" width="100rem" items="{path: '/ZFI_OCASHSet'}" growing="true" growingThreshold="8">
+			<columns>
+            <Column>
+                        <Text text="Company Code"/>
+                    </Column>
+                    <Column>
+                        <Text text="Document No."/>
+                    </Column>
+					<Column>
+                        <Text text="Cost Center"/>
+                    </Column>
+                    <Column>
+                        <Text text="Cost Center Desc."/>
+                    </Column>
+                    <Column>
+                        <Text text="Document Type"/>
+                    </Column>
+                    <Column>
+                        <Text text="Posting Key"/>
+                    </Column>
+					<Column>
+                        <Text text="Account Type"/>
+                    </Column>
+					<Column>
+                        <Text text="Special G/L Indc"/>
+                    </Column>
+					
+					<Column>
+                        <Text text="Debit/Credit Indc"/>
+                    </Column>
+					<Column>
+                        <Text text="Business Area"/>
+                    </Column>
+					
+					<Column>
+                        <Text text="Amount"/>
+                    </Column>
+					<Column>
+                        <Text text="Value Date"/>
+                    </Column>
+					<Column>
+                        <Text text="Assignment No"/>
+                    </Column>
+					<Column>
+                        <Text text="Main Asset Number"/>
+                    </Column>
+                    <Column>
+                        <Text text="Asset Transaction Type"/>
+                    </Column>
+                    <Column>
+                        <Text text="G/L Acc"/>
+                    </Column>
+                    <Column>
+                        <Text text="Customer No"/>
+                    </Column>
+                    <Column>
+                        <Text text="Acc No of Vendor"/>
+                    </Column>
+                    <Column>
+                        <Text text="Id for Acc Details"/>
+                    </Column>
+                    <Column>
+                        <Text text="Bank Acc No"/>
+                    </Column>
+                    <Column>
+                        <Text text="Debit Credit"/>
+                    </Column>
+                    
+            </columns>
+            <items >
+                    <ColumnListItem type="Activation">
+                        <cells >
+                        <Text text="{Bukrs}"/>
+                            <Text text="{Belnr}"/>
+							<Text text="{Kostl}"/>
+                            <Text text="{KostlDes}"/>
+                            <Text text="{Blart}"/>
+							<Text text="{Bschl}"/>
+							<Text text="{Koart}"/>
+							<Text text="{Umskz}"/>							
+							<Text text="{Gsber}"/>
+							<Text text="{Sgtxt}"/>
+							<Text text="{Dmbtr}"/>
+							<Text text="{path:'Valut', type:'sap.ui.model.odata.type.DateTime', constraints: {displayFormat: 'Date'}}"/>
+							<Text text="{Zuonr}"/>
+							<Text text="{Anln1}"/>
+							<Text text="{Anbwa}"/>
+                            <Text text="{Saknr}"></Text>
+                            <Text text="{Kunnr}"></Text>
+                            <Text text="{Lifnr}"></Text>
+                            <Text text="{Hktid}"></Text>
+                            <Text text="{Bankn}"></Text>
+                            <Text text="{Drcr}"></Text>
+                        </cells>
+                    </ColumnListItem>
+            </items>
+ </Table>   
+ </ScrollContainer >        
+</content>
+</Page>
+</mvc:View>

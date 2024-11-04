@@ -1,0 +1,139 @@
+<mvc:View
+	controllerName="costcenterrpt.project2.controller.Detail"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+	displayBlock="true"
+	height="100%"
+	busyIndicatorDelay="0"
+	xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	 xmlns:smartTable="sap.ui.comp.smarttable"
+>
+
+<Page id="page1" title="{i18n>title}">
+        <content >
+
+		
+		
+		<smartFilterBar:SmartFilterBar id ="smartFilterBar1" entitySet="CostDetailOdataSet"
+                 persistencyKey="SmartFilter_Explored" search="onSearchFilter">
+
+                <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration key="Belnr" id="idBelnr"  visibleInAdvancedArea="true">
+                </smartFilterBar:ControlConfiguration>
+                </smartFilterBar:controlConfiguration>
+
+                <!-- <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration key="Gjahr" id="idgjahr1" visibleInAdvancedArea="true">
+                </smartFilterBar:ControlConfiguration>
+                </smartFilterBar:controlConfiguration>
+
+                <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration key="Kostl" id="idkostl1" visibleInAdvancedArea="true"></smartFilterBar:ControlConfiguration>
+                </smartFilterBar:controlConfiguration> -->
+
+		</smartFilterBar:SmartFilterBar>
+		<!-- <smartTable:SmartTable
+                id="smartTable"
+				smartFilterId="smartFilterBar1"
+                width="100%"
+                direction="Column"
+                fitContainer="true"
+                tableType="ResponsiveTable"
+                header="Cost Center Detail Report"
+				enableExport="true"
+                enableAutoBinding="true"
+                useVariantManagement="true"
+                useTablePersonalisation="true"
+                persistencyKey="SmartTable_Explored"
+                entitySet="CostDetailOdataSet"
+                class="sapUiResponsiveContentPadding"
+			    requestAtLeastFields="Belnr,Blart,Bldat,Budat,Xblnr,Awkey,Buzei,Buzid"
+       			initiallyVisibleFields="Belnr,Blart,Bldat,Budat,Xblnr,Awkey,Buzei,Buzid"	
+        > </smartTable:SmartTable>  {/#CostDetailOdataSet/Bukrs/@sap:label} -->
+		<ScrollContainer  width="100%" horizontal="true" vertical="true" focusable="true">
+		<Table id="idTable" width="100rem" items="{path: '/CostDetailOdataSet'}" growing="true" growingThreshold="8">
+			<columns>
+                    
+					<Column>
+                        <Text text="Company Code"/>
+                    </Column>
+                    <Column>
+                        <Text text="Document No."/>
+                    </Column>
+					<Column>
+                        <Text text="Cost Center"/>
+                    </Column>
+                    <Column>
+                        <Text text="Document Type"/>
+                    </Column>
+                    <Column>
+                        <Text text="Document Date"/>
+                    </Column>
+					<Column>
+                        <Text text="Posting Date"/>
+                    </Column>
+					<Column>
+                        <Text text="Reference No"/>
+                    </Column>
+					<Column>
+                        <Text text="Object key"/>
+                    </Column>
+					<Column>
+                        <Text text="Business Area"/>
+                    </Column>
+					
+					<Column>
+                        <Text text="G/L"/>
+                    </Column>
+					<Column>
+                        <Text text="G/L Account Desc"/>
+                    </Column>
+					<Column>
+                        <Text text="Document Amount"/>
+                    </Column>
+					<Column>
+                        <Text text="Central GST"/>
+                    </Column>
+					<Column>
+                        <Text text="State GST"/>
+                    </Column>
+					<Column>
+                        <Text text="Integrated GST"/>
+                    </Column>
+					<Column>
+                        <Text text="Total Amount"/>
+                    </Column>
+                </columns>
+			<items >
+                    <ColumnListItem type="Activation">
+                        <cells >
+                            
+							<Text text="{Bukrs}"/>
+                            <Text text="{Belnr}"/>
+							<Text text="{Kostl}"/>
+                            <Text text="{Blart}"/>
+                            <Text text="{path:'Bldat', type:'sap.ui.model.odata.type.DateTime', constraints: {displayFormat: 'Date'}}"/>
+							<Text text="{path:'Budat', type:'sap.ui.model.odata.type.DateTime', constraints:{displayFormat : 'Date'}}"/>
+							<Text text="{Xblnr}"/>
+							<Text text="{Awkey}"/>
+							<Text text="{Gsber}"/>
+							
+							<Text text="{Hkont}"/>
+							<Text text="{HkontDes}"/>
+							<Text text="{Dmbtr}"/>
+							<Text text="{Cgst}"/>
+							<Text text="{Sgst}"/>
+							<Text text="{Igst}"/>
+							<Text text="{Total}"/>
+							<!-- <Text text="{Buzei}"/>
+							<Text text="{Buzid}"/> -->
+                        </cells>
+                    </ColumnListItem>
+            </items>
+			
+		</Table>
+		</ScrollContainer >
+		</content>
+</Page>		
+</mvc:View>

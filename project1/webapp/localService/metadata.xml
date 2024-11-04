@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZJI_GL_ACC_ODATA_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="CostSummaryOdata" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Bukrs"/>
+                    <PropertyRef Name="Kostl"/>
+                    <PropertyRef Name="Gjahr"/>
+                    <PropertyRef Name="Budat"/>
+                </Key>
+                <Property Name="Bukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Company Code"/>
+                <Property Name="Kostl" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Cost Center"/>
+                <Property Name="KostlDes" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Long Text"/>
+                <Property Name="Gjahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Fiscal Year"/>
+                <Property Name="Hkont" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="G/L"/>
+                <Property Name="HkontDes" Type="Edm.String" Nullable="false" MaxLength="50" sap:label="Name"/>
+                <Property Name="Dmbtr" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Budat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Posting Date"/>
+                <Property Name="Cgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Sgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Igst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Shkzg" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Debit/Credit"/>
+                <Property Name="Qsskz" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="WTax Code"/>
+                <Property Name="Txbhw" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Original Tax Base Amount"/>
+                <Property Name="Mwsts" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="LC Tax"/>
+                <Property Name="Hwbas" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="LC Base"/>
+                <Property Name="Shzuz" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Cash Discount (+/-)"/>
+                <Property Name="Qsshb" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="WTax Base"/>
+                <Property Name="Rrcgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rrsgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rrigst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rpcgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rpsgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rpigst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Total" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="WtQsshh" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:label="W/Tax Base LC"/>
+                <Property Name="WtQbshh" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:label="W/Tax Base LC"/>
+                <Property Name="NetAmnt" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="TransAmnt" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="DifAmnt" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Period" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Period Wise Report"/>
+            </EntityType>
+            <EntityType Name="CostDetailOdata" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Bukrs"/>
+                    <PropertyRef Name="Belnr"/>
+                    <PropertyRef Name="Gjahr"/>
+                </Key>
+                <Property Name="Bukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Company Code"/>
+                <Property Name="Belnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Document Number"/>
+                <Property Name="Gjahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Fiscal Year"/>
+                <Property Name="Blart" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Document type"/>
+                <Property Name="Bldat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Document Date"/>
+                <Property Name="Budat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Posting Date"/>
+                <Property Name="Xblnr" Type="Edm.String" Nullable="false" MaxLength="16" sap:label="Reference"/>
+                <Property Name="Awkey" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Object key"/>
+                <Property Name="Buzei" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="Line item"/>
+                <Property Name="Buzid" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Line Item ID"/>
+                <Property Name="Augdt" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Clearing"/>
+                <Property Name="Augcp" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="ClearingEntDate"/>
+                <Property Name="Augbl" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Clrng doc."/>
+                <Property Name="Bschl" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Posting Key"/>
+                <Property Name="Koart" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Account type"/>
+                <Property Name="Umsks" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Transact.Type"/>
+                <Property Name="Zumsk" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Trg.Sp.G/L Ind."/>
+                <Property Name="Shkzg" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Debit/Credit"/>
+                <Property Name="Gsber" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Business Area"/>
+                <Property Name="Mwskz" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Tax Code"/>
+                <Property Name="Qsskz" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="WTax Code"/>
+                <Property Name="Dmbtr" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Txbhw" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Original Tax Base Amount"/>
+                <Property Name="Mwsts" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="LC Tax"/>
+                <Property Name="Hwbas" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="LC Base"/>
+                <Property Name="Shzuz" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Cash Discount (+/-)"/>
+                <Property Name="Mwart" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Tax Type"/>
+                <Property Name="Ktosl" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="Transaction"/>
+                <Property Name="Qsshb" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="WTax Base"/>
+                <Property Name="Zuonr" Type="Edm.String" Nullable="false" MaxLength="18" sap:label="Assignment"/>
+                <Property Name="Sgtxt" Type="Edm.String" Nullable="false" MaxLength="50" sap:label="Text"/>
+                <Property Name="Bewar" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="Cons.Trans.Type"/>
+                <Property Name="Kostl" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Cost Center"/>
+                <Property Name="KostlDes" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Description"/>
+                <Property Name="Anln1" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Asset"/>
+                <Property Name="Anln2" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Sub-number"/>
+                <Property Name="Anbwa" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="Ast Transaction Type"/>
+                <Property Name="Bzdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Asset Val. Date"/>
+                <Property Name="Pernr" Type="Edm.String" Nullable="false" MaxLength="8" sap:label="Personnel No."/>
+                <Property Name="Hkont" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="G/L"/>
+                <Property Name="HkontDes" Type="Edm.String" Nullable="false" MaxLength="50" sap:label="Long Text"/>
+                <Property Name="Kunnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Customer"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Vendor"/>
+                <Property Name="Cgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Sgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Igst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rrcgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rrsgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rrigst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rpcgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rpsgst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Rpigst" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="Total" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="WtWithcd" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="W/Tax Code"/>
+                <Property Name="WtQsshh" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:label="W/Tax Base LC"/>
+                <Property Name="WtQbshh" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:label="W/Tax Base LC"/>
+                <Property Name="NetAmnt" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="TransAmnt" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+                <Property Name="DifAmnt" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:label="Amount in LC"/>
+            </EntityType>
+            <EntityType Name="BukrsoData" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="bukrs"/>
+                </Key>
+                <Property Name="bukrs" Type="Edm.String" Nullable="false" MaxLength="4"/>
+            </EntityType>
+            <EntityType Name="PeriodoData" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Period"/>
+                </Key>
+                <Property Name="Period" Type="Edm.String" Nullable="false" MaxLength="16" sap:label="Period Wise Report"/>
+            </EntityType>
+            <EntityType Name="documentNo" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Bukrs"/>
+                </Key>
+                <Property Name="belnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Document Number"/>
+                <Property Name="Bukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Company Code"/>
+                <Property Name="Gjahr" Type="Edm.String" Nullable="false"/>
+            </EntityType>
+            <EntityContainer Name="ZJI_GL_ACC_ODATA_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="CostSummaryOdataSet" EntityType="ZJI_GL_ACC_ODATA_SRV.CostSummaryOdata" sap:content-version="1"/>
+                <EntitySet Name="CostDetailOdataSet" EntityType="ZJI_GL_ACC_ODATA_SRV.CostDetailOdata" sap:content-version="1"/>
+                <EntitySet Name="BukrsoDataSet" EntityType="ZJI_GL_ACC_ODATA_SRV.BukrsoData" sap:content-version="1"/>
+                <EntitySet Name="PeriodoDataSet" EntityType="ZJI_GL_ACC_ODATA_SRV.PeriodoData" sap:content-version="1"/>
+                <EntitySet Name="documentNoSet" EntityType="ZJI_GL_ACC_ODATA_SRV.documentNo" sap:content-version="1"/>
+            </EntityContainer>
+            <atom:link rel="self" href="http://jcdevqasapp.jayfinechem.com:8001/sap/opu/odata/sap/ZJI_GL_ACC_ODATA_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://jcdevqasapp.jayfinechem.com:8001/sap/opu/odata/sap/ZJI_GL_ACC_ODATA_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

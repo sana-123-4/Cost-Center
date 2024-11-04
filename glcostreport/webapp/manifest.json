@@ -1,0 +1,184 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "glcostrept.glcostreport",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.15.2",
+      "toolsId": "1a5ad0b6-f9a3-4398-888d-63f3b82aec4c"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZJI_FI_CASH_ODATA1_SRV/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "ZEXPCASHRPT-display": {
+          "semanticObject": "ZEXPCASHRPT",
+          "action": "display",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.129.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "glcostrept.glcostreport.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "glcostrept.glcostreport.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteView",
+          "pattern": ":?query:",
+          "target": [
+            "TargetView"
+          ]
+        },
+        {
+          "name": "RouteGLSumView",
+          "pattern": "CashSummary/CoCode/{Bukrs}/Fiscal/{Gjahr}/Period/{Period}",
+          "target": [
+            "TargetGLSum"
+          ]
+        },
+        {
+          "name": "RouteGLDetail",
+          "pattern": "CashDetail/GlId/{Hkont}/CoCode/{Bukrs}/Fiscal/{Gjahr}/Period/{Period}",
+          "target": [
+            "TargetGLDetail"
+          ]
+        },
+        {
+          "name": "RouteExpenSumView",
+          "pattern": "ExpenseSummary/CoCode/{Bukrs}/Fiscal/{Gjahr}/Period/{Period}",
+          "target": [
+            "TargetExpenseSum"
+          ]
+        },
+        {
+          "name": "RouteExpenDetail",
+          "pattern": "ExpenseDetail/costId/{Kostl}/CoCode/{Bukrs}/Fiscal/{Gjahr}/Period/{Period}",
+          "target": [
+            "TargetExpenseDetail"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetView": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "View",
+          "viewName": "View"
+        },
+        "TargetGLSum": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "GLSumm",
+          "viewName": "GLSumm"
+        },
+        "TargetGLDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "GLDetail",
+          "viewName": "GLDetail"
+        },
+        "TargetExpenseSum": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ExpenseSumm",
+          "viewName": "ExpenseSumm"
+        },
+        "TargetExpenseDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ExpenseDetail",
+          "viewName": "ExpenseDetail"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "glcostrept.glcostreport.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

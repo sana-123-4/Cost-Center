@@ -1,0 +1,120 @@
+<mvc:View
+	controllerName="glcostrept.glcostreport.controller.GLDetail"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+	displayBlock="true"
+	height="100%"
+	busyIndicatorDelay="0"
+>
+<Page id="page1" title="{i18n>title}">
+<content>
+
+<ScrollContainer  width="100%" horizontal="true" vertical="true" focusable="true">
+        <Toolbar >
+
+        <ToolbarSpacer/>
+        <Button icon="sap-icon://vertical-grip" id="CreateButton" 
+        text="Personalization" type="Emphasized" press="onColumnSelection"/>
+        </Toolbar>
+<Table id="idTable" width="100rem" items="{path: '/ZFI_OCASHSet'}" growing="true" growingThreshold="8">
+			<columns>
+            <Column id="comCode">
+                        <Text text="Company Code"/>
+                    </Column>
+                    <Column id="docNo">
+                        <Text text="Document No."/>
+                    </Column>
+					<Column id="costCenter">
+                        <Text text="Cost Center"/>
+                    </Column>
+                    <Column id="costText">
+                        <Text text="Cost Center Desc."/>
+                    </Column>
+                    <Column id="docType">
+                        <Text text="Document Type"/>
+                    </Column>
+                    <Column id="postKey" visible="false">
+                        <Text text="Posting Key"/>
+                    </Column>
+					<Column id="accType">
+                        <Text text="Account Type"/>
+                    </Column>
+					<Column id="gl">
+                        <Text text="Special G/L Indc"/>
+                    </Column>
+					
+					<Column id="drcrInd" visible="false">
+                        <Text text="Debit/Credit Indc"/>
+                    </Column>
+					<Column id="plant">
+                        <Text text="Business Area"/>
+                    </Column>
+					
+					<Column id="amt">
+                        <Text text="Amount"/>
+                    </Column>
+					<Column id="valDate" visible="false">
+                        <Text text="Value Date"/>
+                    </Column>
+					<Column id="assgNo" visible="false">
+                        <Text text="Assignment No"/>
+                    </Column>
+					<Column id="assNo" visible="false">
+                        <Text text="Main Asset Number"/>
+                    </Column>
+                    <Column id="assType" visible="false">
+                        <Text text="Asset Transaction Type"/>
+                    </Column>
+                    <Column id="glAcc">
+                        <Text text="G/L Acc"/>
+                    </Column>
+                    <Column id="custNo">
+                        <Text text="Customer No"/>
+                    </Column>
+                    <Column id="vendorAcc">
+                        <Text text="Acc No of Vendor"/>
+                    </Column>
+                    <Column id="AccDet">
+                        <Text text="Id for Acc Details"/>
+                    </Column>
+                    <Column id="bankAccNo">
+                        <Text text="Bank Acc No"/>
+                    </Column>
+                    <Column id="drcr">
+                        <Text text="Debit Credit"/>
+                    </Column>
+                    
+            </columns>
+            <items >
+                    <ColumnListItem type="Activation">
+                        <cells >
+                        <Text text="{Bukrs}"/>
+                            <Text text="{Belnr}"/>
+							<Text text="{Kostl}"/>
+                            <Text text="{KostlDes}"/>
+                            <Text text="{Blart}"/>
+							<Text text="{Bschl}"/>
+							<Text text="{Koart}"/>
+							<Text text="{Umskz}"/>							
+							<Text text="{Gsber}"/>
+							<Text text="{Sgtxt}"/>
+							<Text text="{Dmbtr}"/>
+							<Text text="{path:'Valut', type:'sap.ui.model.odata.type.DateTime', constraints: {displayFormat: 'Date'}}"/>
+							<Text text="{Zuonr}"/>
+							<Text text="{Anln1}"/>
+							<Text text="{Anbwa}"/>
+                            <Text text="{Saknr}"></Text>
+                            <Text text="{Kunnr}"></Text>
+                            <Text text="{Lifnr}"></Text>
+                            <Text text="{Hktid}"></Text>
+                            <Text text="{Bankn}"></Text>
+                            <Text text="{Drcr}"></Text>
+                        </cells>
+                    </ColumnListItem>
+            </items>
+ </Table>   
+ </ScrollContainer >        
+</content>
+</Page>
+</mvc:View>

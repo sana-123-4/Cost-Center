@@ -1,0 +1,184 @@
+<mvc:View controllerName="glcostrept.glcostreport.controller.View"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:l="sap.ui.commons.layout">
+    <Page id="page" title="{i18n>title}">
+        <content>
+        <smartFilterBar:SmartFilterBar id ="smartFilterBar" entitySet="ZFI_SUM_GLCASHset" 
+                 persistencyKey="SmartFilter_Explored"  useToolbar="true">
+
+             <smartFilterBar:controlConfiguration>  
+                <smartFilterBar:ControlConfiguration key="Bukrs" id="idbukrs"  visibleInAdvancedArea="true">
+                 <smartFilterBar:customControl>
+								<Select forceSelection="false" change="onComChange" 
+									id="idBukrsSelect"
+									items="{/BukrsoDataSet}" selectedKey="3000">
+                                    
+                                    <core:Item key="{bukrs}" text="{butxt}"></core:Item>
+									
+								</Select>
+				</smartFilterBar:customControl>
+                            
+                </smartFilterBar:ControlConfiguration>
+             </smartFilterBar:controlConfiguration>  
+
+             <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration key="Gjahr" id="idgjahr" visibleInAdvancedArea="true">
+                <smartFilterBar:defaultFilterValues>
+                <smartFilterBar:SelectOption low='2024'></smartFilterBar:SelectOption>
+                </smartFilterBar:defaultFilterValues>
+                </smartFilterBar:ControlConfiguration>
+            </smartFilterBar:controlConfiguration>   
+
+
+            <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration key="Kostl" id="idKostl" visibleInAdvancedArea="true">
+                 <smartFilterBar:customControl>
+                 <Input id="inputFieldWithF4" value="{CostCenterDataSet>/HkontDes}"  showValueHelp="true" valueHelpOnly="true"
+                       valueHelpRequest="onValueHelpRequest" />
+                </smartFilterBar:customControl> 
+                </smartFilterBar:ControlConfiguration>
+            </smartFilterBar:controlConfiguration>  
+
+            <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration key="Hkont" id="idHkont" visibleInAdvancedArea="true">
+                 <smartFilterBar:customControl>
+                 <Input id="hkontF4"   showValueHelp="true" showSuggestion="true"
+                       valueHelpRequest=".onWhitespaceVHRequested" 
+                       suggestionItems="{
+                            path: '/GLAccDataSet',
+                            length: 10
+                        }">
+                       <suggestionItems>
+                        <core:ListItem
+                            key="{SAKNR}"
+                            text="{
+                                path : 'SAKNR'
+                                
+                            }"
+                            additionalText="{
+                                path : 'MCOD1'
+                                
+                            }"/>
+			</suggestionItems>
+            </Input>
+                </smartFilterBar:customControl> 
+                </smartFilterBar:ControlConfiguration>
+            </smartFilterBar:controlConfiguration>   
+
+             
+
+            <smartFilterBar:controlConfiguration>
+                <smartFilterBar:ControlConfiguration
+							key="Period"
+							label="Period"
+							visibleInAdvancedArea="true">
+							<smartFilterBar:customControl>
+								<Select
+									id="customSelect"
+									change="onPeriodChange">
+                                    <core:Item  text="Yearly"></core:Item>
+									<core:Item  text="Quarter-1"></core:Item>
+                                    <core:Item  text ="Quarter-2"></core:Item>
+                                    <core:Item text="Quarter-3"></core:Item>
+                                    <core:Item  text="Quarter-4"></core:Item>
+                                    <core:Item  text="First Half"></core:Item>
+                                    <core:Item  text="Second Half"></core:Item>
+								</Select>
+							</smartFilterBar:customControl>
+						</smartFilterBar:ControlConfiguration>
+                </smartFilterBar:controlConfiguration>   
+
+            
+
+        </smartFilterBar:SmartFilterBar>  
+        	<IconTabHeader mode="Inline">
+		<items>
+			<IconTabFilter key="cashrpt" text="Cash Flow Report" id="cashRpt" />
+			<IconTabFilter key="expenserpt" text="Expense Report" id="expRpt" />
+			
+		</items>
+	</IconTabHeader>
+        
+        <l:MatrixLayout width="100%" widths="50%,50%">
+
+  <l:MatrixLayoutRow>
+
+  <l:MatrixLayoutCell>
+
+  <ScrollContainer focusable="true" height="100%" horizontal="false" vertical="true" width="100%">
+  
+<viz:VizFrame id="vizFrame" vizType="pie" width="100%" height="400px" vizProperties="{title : {text : 'GL Wise Cash Flow Report'}}" 
+ uiConfig="{applicationSet:'fiori'}">
+    
+    <viz:dataset>
+
+        <viz.data:FlattenedDataset id="idPieDataset" data="{/ZFI_SUM_GLCASHset}">
+            <viz.data:dimensions>
+                <viz.data:DimensionDefinition name="GL Account" value="{ZFI_SUM_GLCASHset>HkontDes}" />
+            </viz.data:dimensions>
+            <viz.data:measures>
+                <viz.data:MeasureDefinition name="Amount" value="{ZFI_SUM_GLCASHset>Dmbtr}" />
+            </viz.data:measures>
+        </viz.data:FlattenedDataset>
+    </viz:dataset>
+
+     <!-- Feeds for dimensions and measures -->
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="color" type="Dimension" values="GL Account" />
+                    <viz.feeds:FeedItem uid="size" type="Measure" values="Amount" />
+                </viz:feeds>
+
+                <viz:dependents>
+                    <viz:Popover id="idPopOver"></viz:Popover>
+                </viz:dependents>
+    
+    </viz:VizFrame>
+     </ScrollContainer>
+
+  </l:MatrixLayoutCell>
+
+  <l:MatrixLayoutCell>
+  <ScrollContainer focusable="true" height="100%" horizontal="false" vertical="true" width="100%">
+
+    <viz:VizFrame id="vizFrame2" vizType="stacked_bar" width="100%" height="400px" vizProperties="{title : {text : 'Cost Center Wise Expense Report'}}" 
+        uiConfig="{applicationSet:'fiori'}">
+
+        <viz:dataset>
+
+        <viz.data:FlattenedDataset id="idPieDataset2" data="{/CostSummaryOdataSet}">
+            <viz.data:dimensions>
+                <viz.data:DimensionDefinition name="Cost Center" value="{CostSummaryOdataSet>KostlDes}" sorter="{bAescending: true}"/>
+            </viz.data:dimensions>
+            <viz.data:measures>
+                <viz.data:MeasureDefinition name="Amount" value="{CostSummaryOdataSet>Dmbtr}" />
+            </viz.data:measures>
+        </viz.data:FlattenedDataset>
+    </viz:dataset>
+
+    <!-- Feeds for dimensions and measures -->
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Cost Center" />
+                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Amount" />
+                </viz:feeds> 
+
+                 <viz:dependents>
+                    <viz:Popover id="idPopOver2"></viz:Popover>
+                </viz:dependents>
+
+    </viz:VizFrame>
+    </ScrollContainer>
+
+  </l:MatrixLayoutCell>
+
+  </l:MatrixLayoutRow>
+
+  </l:MatrixLayout>
+        </content>
+    </Page>
+</mvc:View>

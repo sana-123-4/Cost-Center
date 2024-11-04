@@ -1,0 +1,68 @@
+<mvc:View
+	controllerName="glcostrept.glcostreport.controller.GLSumm"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+     xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:core="sap.ui.core"
+	displayBlock="true"
+	height="100%"
+	busyIndicatorDelay="0"
+>
+<Page id="page" title="{i18n>title}">
+<content>
+<viz:VizFrame id="vizFrame" vizType="pie" width="100%" height="400px" vizProperties="{title : {text : 'GL Account'}}" 
+ uiConfig="{applicationSet:'fiori'}">
+    
+    <viz:dataset>
+
+        <viz.data:FlattenedDataset id="idPieDataset" data="{/ZFI_SUM_GLCASHset}">
+            <viz.data:dimensions>
+                <viz.data:DimensionDefinition name="GL Account" value="{ZFI_SUM_GLCASHset>HkontDes}" />
+            </viz.data:dimensions>
+            <viz.data:measures>
+                <viz.data:MeasureDefinition name="Amount" value="{ZFI_SUM_GLCASHset>Dmbtr}" />
+            </viz.data:measures>
+        </viz.data:FlattenedDataset>
+    </viz:dataset>
+
+     <!-- Feeds for dimensions and measures -->
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="color" type="Dimension" values="GL Account" />
+                    <viz.feeds:FeedItem uid="size" type="Measure" values="Amount" />
+                </viz:feeds>
+
+                <viz:dependents>
+                    <viz:Popover id="idPopOver"></viz:Popover>
+                </viz:dependents>
+    
+    </viz:VizFrame>
+
+
+         <Table id="idTable"  items="{/ZFI_SUM_GLCASHset}" growing="true" growingThreshold="10" >
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Cash Flow Report"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                <Column ><Text text="GL Account"/></Column>
+                <Column ><Text text="GL Account Description"/></Column>
+                <Column ><Text text="Amount"/></Column>
+                </columns>
+                <items >
+                    <ColumnListItem type="Navigation" press="onNavigation">
+                        <cells >
+                            <!-- <Text text="{Bukrs}"/>
+                            <Text text="{Gjahr}"/> -->
+                            <Text text="{Hkont}"/>
+                            <Text text="{HkontDes}"/>
+                            <Text text="{Dmbtr}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+          </Table>             
+</content>
+</Page>
+</mvc:View>

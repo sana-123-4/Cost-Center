@@ -1,0 +1,11 @@
+{
+    "base": "./dist",
+    "conn_usestrictssl" : false,
+    "conn_server": "http://jcdevqasapp.jayfinechem.com:8000/",
+    "conn_client" : "100",
+    "conn_user": "A5E_DEV",
+    "conn_password": "Jc@2023",
+    "abap_package": "$TMP",
+    "abap_bsp": "ZEXPRPT_APP",
+    "abap_bsp_text": "Expense Cost Center"
+}
