@@ -5,31 +5,31 @@
 	xmlns:core="sap.ui.core">
 	<ValueHelpDialog
 		title="Product"
-		ok=".onValueHelpOkPress"
-		cancel=".onValueHelpCancelPress"
-		afterClose=".onValueHelpAfterClose"
+		ok=".onHkontValueHelpOkPress"
+		cancel=".onHkontValueHelpCancelPress"
+		afterClose=".onHkontValueHelpAfterClose"
 		supportRanges="true"
-		key="Kostl"
-		descriptionKey="Ltext">
+		key="SAKNR"
+		descriptionKey="MCOD1">
 		<filterBar>
 			<fb:FilterBar advancedMode="true" search=".onFilterBarSearch" isRunningInValueHelpDialog="true">
 				<fb:filterGroupItems>
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="Kostl"
-						label="Cost Center"
+						name="SAKNR"
+						label="GL Account"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="Kostl" />
+							<m:Input name="SAKNR" />
 						</fb:control>
 					</fb:FilterGroupItem>
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="Ltext"
+						name="MCOD1"
 						label="Description"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="Ltext" />
+							<m:Input name="MCOD1" />
 						</fb:control>
 					</fb:FilterGroupItem>
 				</fb:filterGroupItems>

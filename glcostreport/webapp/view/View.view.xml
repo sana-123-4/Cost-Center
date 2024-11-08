@@ -10,10 +10,14 @@
     <Page id="page" title="{i18n>title}">
         <content>
         <smartFilterBar:SmartFilterBar id ="smartFilterBar" entitySet="ZFI_SUM_GLCASHset" 
-                 persistencyKey="SmartFilter_Explored"  useToolbar="true">
+                 persistencyKey="UniqueAndStablePersistencyKey"   useToolbar="true" filterChange="onFilterChange">
 
-             <smartFilterBar:controlConfiguration>  
-                <smartFilterBar:ControlConfiguration key="Bukrs" id="idbukrs"  visibleInAdvancedArea="true">
+             <smartFilterBar:controlConfiguration >  
+                <smartFilterBar:ControlConfiguration key="Bukrs" id="idbukrs"     visibleInAdvancedArea="true">
+                 <!-- <smartFilterBar:customControl>
+                 <Input id="bukrsF4Help" value="{BukrsoDataSet>/butxt}"  showValueHelp="true" 
+                       valueHelpRequest="onCompanyCodeValueHelpRequest"  change="onComChange"/>
+                </smartFilterBar:customControl>  -->
                  <smartFilterBar:customControl>
 								<Select forceSelection="false" change="onComChange" 
 									id="idBukrsSelect"
@@ -23,12 +27,12 @@
 									
 								</Select>
 				</smartFilterBar:customControl>
-                            
+      
                 </smartFilterBar:ControlConfiguration>
-             </smartFilterBar:controlConfiguration>  
+             </smartFilterBar:controlConfiguration> 
 
              <smartFilterBar:controlConfiguration>
-                <smartFilterBar:ControlConfiguration key="Gjahr" id="idgjahr" visibleInAdvancedArea="true">
+                <smartFilterBar:ControlConfiguration key="Gjahr" id="idgjahr"  visibleInAdvancedArea="true">
                 <smartFilterBar:defaultFilterValues>
                 <smartFilterBar:SelectOption low='2024'></smartFilterBar:SelectOption>
                 </smartFilterBar:defaultFilterValues>
@@ -39,8 +43,25 @@
             <smartFilterBar:controlConfiguration>
                 <smartFilterBar:ControlConfiguration key="Kostl" id="idKostl" visibleInAdvancedArea="true">
                  <smartFilterBar:customControl>
-                 <Input id="inputFieldWithF4" value="{CostCenterDataSet>/HkontDes}"  showValueHelp="true" valueHelpOnly="true"
-                       valueHelpRequest="onValueHelpRequest" />
+                 <MultiInput id="inputFieldWithF4" value="{CostCenterDataSet>/Ltext}"  showValueHelp="true" valueHelpOnly="true"
+                       valueHelpRequest="onValueHelpRequested" suggestionRows="{
+				path: '/CostCenterDataSet',
+				length: 10}" >
+                <suggestionColumns>
+				<Column>
+					<Label text="Cost Center"/>
+				</Column>
+				<Column>
+					<Label text="Description"/>
+				</Column>
+			</suggestionColumns>
+			<suggestionRows>
+				<ColumnListItem>
+					<Label text="{Kostl}" />
+					<Label text="{Ltext}" />
+				</ColumnListItem>
+			</suggestionRows>
+            </MultiInput>
                 </smartFilterBar:customControl> 
                 </smartFilterBar:ControlConfiguration>
             </smartFilterBar:controlConfiguration>  
@@ -48,25 +69,30 @@
             <smartFilterBar:controlConfiguration>
                 <smartFilterBar:ControlConfiguration key="Hkont" id="idHkont" visibleInAdvancedArea="true">
                  <smartFilterBar:customControl>
-                 <Input id="hkontF4"   showValueHelp="true" showSuggestion="true"
-                       valueHelpRequest=".onWhitespaceVHRequested" 
-                       suggestionItems="{
-                            path: '/GLAccDataSet',
-                            length: 10
-                        }">
-                       <suggestionItems>
-                        <core:ListItem
-                            key="{SAKNR}"
-                            text="{
-                                path : 'SAKNR'
-                                
-                            }"
-                            additionalText="{
-                                path : 'MCOD1'
-                                
-                            }"/>
-			</suggestionItems>
-            </Input>
+
+                  <!-- <MultiInput id="hkontF4" value="{GLAccDataSet>/MCOD1}"  showValueHelp="true" 
+                       valueHelpRequest="onHkontValueHelpRequested" /> -->
+           
+                 <MultiInput id="hkontF4" value="{GLAccDataSet>/MCOD1}"  showValueHelp="true" valueHelpOnly="true"
+                       valueHelpRequest="onHkontValueHelpRequested" suggestionRows="{
+				path: '/GLAccDataSet',
+				length: 10}" >
+                <suggestionColumns>
+				<Column>
+					<Label text="GL Account"/>
+				</Column>
+				<Column>
+					<Label text="Description"/>
+				</Column>
+			</suggestionColumns>
+			<suggestionRows>
+				<ColumnListItem>
+					<Label text="{SAKNR}" />
+					<Label text="{MCOD1}" />
+				</ColumnListItem>
+			</suggestionRows>
+            </MultiInput>
+               
                 </smartFilterBar:customControl> 
                 </smartFilterBar:ControlConfiguration>
             </smartFilterBar:controlConfiguration>   

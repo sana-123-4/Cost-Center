@@ -7,8 +7,14 @@ sap.ui.define([
     "sap/ui/comp/valuehelpdialog/ValueHelpDialog",
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/Fragment",
+    "sap/ui/comp/filterbar/FilterBar",
+    'sap/ui/model/type/String',
+    'sap/ui/table/Column',
+	'sap/m/Column',
+	'sap/m/Text',
+    'sap/m/Label',
 ],
-function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDialog,JSONModel,Fragment) {
+function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDialog,JSONModel,Fragment,FilterBar,TypeString, UIColumn, MColumn, Text,Label) {
     "use strict";
 
     return Controller.extend("glcostrept.glcostreport.controller.View", {
@@ -16,6 +22,8 @@ function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDia
 
             this.oODataModel1 = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZJI_FI_CASH_ODATA1_SRV/");
             this.oODataModel2 = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZJI_GL_ACC_ODATA_SRV/");
+            
+
             var oView = this.getView();
 
             var oSmartFilterBar = this.getView().byId("smartFilterBar");
@@ -58,6 +66,7 @@ function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDia
 
         },
         onComChange : function(oEvent){
+           
             var selBukrs =  oEvent.getParameters().selectedItem.getKey();
   
             var oSelect = this.getView().byId("customSelect");
@@ -92,7 +101,7 @@ function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDia
   
           onPeriodChange: function(oEvent){
              var oPeriod =  oEvent.getParameters().selectedItem.mProperties.text;
-           
+       
              var oSelectedBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
              var selBukrs = oSelectedBukrs.mProperties.key;
   
@@ -118,7 +127,617 @@ function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDia
               this.callCashChartoData(aFilters);
               this.callCostChartoData(aFilters);
           },
+
+          onFilterChange : function(oEvent){
+
+            // Get the SmartFilterBar instance
+            var oSmartFilterBar = oEvent.getSource();
+
+            // Retrieve filter data with applied values
+            var oFilterData = oSmartFilterBar.getFilterData();
+
+            if (oFilterData.Gjahr != null){
+            var oGjahr =   oFilterData.Gjahr.value;  
+            if (oGjahr == null){
+            var oGjahr   = oFilterData.Gjahr.ranges[0].value1;    
+            } 
+            }
+
+            var oSelectedBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
+            var selBukrs = oSelectedBukrs.mProperties.key;
+
+            var oSelect = this.getView().byId("customSelect");
+              // Retrieve the selected Period item (optional, if you need the text)
+            var oSelectedItem = oSelect.getSelectedItem();
+            var sSelectedPeriod = oSelectedItem ? oSelectedItem.getText() : null;
+
+            var aFilters = [];
+              if(selBukrs){
+                  aFilters.push(new Filter("Bukrs", FilterOperator.EQ, selBukrs));
+              }
   
+              if(oGjahr){
+                  aFilters.push(new Filter("Gjahr", FilterOperator.EQ, oGjahr));
+              }
+
+              if(sSelectedPeriod){
+                aFilters.push(new Filter("Zperiod", FilterOperator.EQ, sSelectedPeriod));
+            }
+            
+              this.callCashChartoData(aFilters);
+              this.callCostChartoData(aFilters);
+
+          },
+  
+        onGLChartClick: function (oEvent) {
+           
+            var oData = oEvent.getParameter("data");
+
+            var selBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
+            var P_Bukrs = selBukrs.mProperties.key;
+
+            var selPeriod = this.getView().byId("customSelect").getSelectedItem();
+            var P_Period = selPeriod.mProperties.text;
+
+            var oSmartFilterBar = this.getView().byId("smartFilterBar");
+            var oFilterData = oSmartFilterBar.getFilterData();
+
+            var P_Gjahr = oFilterData.Gjahr.ranges[0].value1;
+
+            var P_Bukrs  = '1000';
+            var P_Gjahr  = '2020';
+            var P_Period = 'Yearly';
+
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+            oRouter.navTo("RouteGLSumView", {
+                Bukrs: P_Bukrs,
+                Gjahr: P_Gjahr,
+                Period:P_Period
+            });
+           
+        },
+        onExpChartClick : function(oEvent){
+            var oData = oEvent.getParameter("data");
+
+            var selBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
+            var P_Bukrs = selBukrs.mProperties.key;
+
+            var selPeriod = this.getView().byId("customSelect").getSelectedItem();
+            var P_Period = selPeriod.mProperties.text;
+
+            var oSmartFilterBar = this.getView().byId("smartFilterBar");
+            var oFilterData = oSmartFilterBar.getFilterData();
+
+            var P_Gjahr = oFilterData.Gjahr.ranges[0].value1;
+
+            var P_Bukrs  = '1000';
+            var P_Gjahr  = '2020';
+            var P_Period = 'Yearly';
+
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+            oRouter.navTo("RouteExpenSumView", {
+                Bukrs: P_Bukrs,
+                Gjahr: P_Gjahr,
+                Period:P_Period
+            });
+        },
+        onValueHelpRequest : function(oEvent)
+        {
+            var that = this;
+            var oInput = oEvent.getSource();
+            var oView = this.getView();
+
+            this._oBasicSearchField = new SearchField();
+            if (!this._oValueHelpDialog) {
+               
+            this._oValueHelpDialog = new sap.ui.comp.valuehelpdialog.ValueHelpDialog("inputKostl",{
+                title: "Select Cost Center",
+                supportRanges: true,
+                key: "Kostl",
+                descriptionKey: "Ltext",
+
+               
+                ok: function (oEvent) {
+                    var aTokens = oEvent.getParameter("tokens");
+                    
+                    if (aTokens && aTokens.length > 0) {
+                        oInput.setValue(aTokens[0].getText());
+                    }
+                    this._oValueHelpDialog.close();
+                }.bind(this),
+                cancel: function () {
+                    sap.m.MessageToast.show("Cancel pressed!");
+                    this._oValueHelpDialog.close();
+                }.bind(this),
+                afterClose: function() {
+                    this._oValueHelpDialog.destroy();
+                }.bind(this)
+            });
+            
+        }
+
+            var oColModel = new JSONModel({
+                cols: [
+                    { label: "Cost Center", template: "Kostl" },  
+                    { label: "Description", template: "Ltext" }   
+                ]
+            });
+
+           var of4Table = this._oValueHelpDialog.getTable();
+            of4Table.setModel(oColModel,"columns");
+
+            // Set the OData model for the dialog's table
+            var oODataModel = this.getView().getModel();  // Assuming OData model is set on the view
+            this._oValueHelpDialog.getTable().setModel(oODataModel);
+            
+            // Bind the rows of the table to the OData entity set (e.g., "CompanyCodeSet")
+            this._oValueHelpDialog.getTable().bindRows("/CostCenterDataSet");
+           
+            this._oValueHelpDialog.setRangeKeyFields([ {label:"Cost Center", Key:"Kostl"},{label:"Description", key:"Ltext"}]);
+          
+            if (of4Table.bindRows) {
+               // of4Table.addColumn(oColModel);
+                of4Table.bindAggregation("rows", "/CostCenterDataSet");
+            }
+
+            var oFilterBar = new sap.ui.comp.filterbar.FilterBar({
+                advancedMode:  true,
+			    filterBarExpanded: false,
+            });
+            
+        this._oValueHelpDialog.open();
+            
+        },
+       
+
+        onValueHelpRequested: function () {
+            var oView = this.getView();
+            this._oBasicSearchField = new SearchField();
+           
+            
+            this.loadFragment({
+				name: "glcostrept.glcostreport.fragments.ValueHelpDialog"
+			}).then(function(oDialog) {
+				var oFilterBar = oDialog.getFilterBar(), oColumnProductCode, oColumnProductName;
+				this._oVHD = oDialog;
+               
+				this.getView().addDependent(oDialog);
+
+				// Set key fields for filtering in the Define Conditions Tab
+				oDialog.setRangeKeyFields([{
+					label: "Product",
+					key: "Kostl",
+					type: "string",
+					typeInstance: new TypeString({}, {
+						maxLength: 7
+					})
+			}]);
+
+            // Set Basic Search for FilterBar
+				oFilterBar.setFilterBarExpanded(false);
+				oFilterBar.setBasicSearch(this._oBasicSearchField);
+
+				// Trigger filter bar search when the basic search is fired
+				this._oBasicSearchField.attachSearch(function() {
+					oFilterBar.search();
+				});
+
+                oDialog.getTableAsync().then(function (oTable) {
+
+                    var oODataModel = this.getView().getModel();  
+					oTable.setModel(oODataModel);
+                   
+					// For Desktop and tabled the default table is sap.ui.table.Table
+					if (oTable.bindRows) {
+						// Bind rows to the ODataModel and add columns
+						oTable.bindAggregation("rows", {
+							path: "/CostCenterDataSet",
+							events: {
+								dataReceived: function() {
+									oDialog.update();
+								}
+							}
+						});
+						oColumnProductCode = new UIColumn({label: new Label({text: "Cost Center"}), template: new Text({wrapping: false, text: "{Kostl}"})});
+						oColumnProductCode.data({
+							fieldName: "Kostl"
+						});
+						oColumnProductName = new UIColumn({label: new Label({text: "Description"}), template: new Text({wrapping: false, text: "{Ltext}"})});
+						oColumnProductName.data({
+							fieldName: "Ltext"
+						});
+						oTable.addColumn(oColumnProductCode);
+						oTable.addColumn(oColumnProductName);
+					}
+
+					// For Mobile the default table is sap.m.Table
+					if (oTable.bindItems) {
+						// Bind items to the ODataModel and add columns
+						oTable.bindAggregation("items", {
+							path: "/CostCenterDataSet",
+							template: new ColumnListItem({
+								cells: [new Label({text: "{Kostl}"}), new Label({text: "{Ltext}"})]
+							}),
+							events: {
+								dataReceived: function() {
+									oDialog.update();
+								}
+							}
+                    	});
+						oTable.addColumn(new MColumn({header: new Label({text: "Cost Center"})}));
+						oTable.addColumn(new MColumn({header: new Label({text: "Description"})}));
+					}
+
+                    oDialog.update();
+				}.bind(this));
+                
+                oDialog.getTable().attachRowSelectionChange(function(oEvent) {
+                    var oSelectedItem = oEvent.getParameter("rowContext");
+                   
+                });
+                this._oMultiInput = this.getView().byId("inputFieldWithF4");
+                oDialog.setTokens(this._oMultiInput.getTokens());
+				oDialog.open();
+			}.bind(this));
+            
+        },
+        onValueHelpOkPress: function (oEvent) {
+            
+			var aTokens = oEvent.getParameter("tokens");
+            this._oMultiInput = this.getView().byId("inputFieldWithF4");
+			this._oMultiInput.setTokens(aTokens);
+			this._oVHD.close();
+
+            var KostlArr = [];
+            aTokens.forEach(function (oToken) {
+               
+                var sKey = oToken.getKey();
+                
+                KostlArr.push(sKey);
+            });
+            
+            
+            var selBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
+            var P_Bukrs = selBukrs.mProperties.key;
+
+            var selPeriod = this.getView().byId("customSelect").getSelectedItem();
+            var P_Period = selPeriod.mProperties.text;
+
+            var oSmartFilterBar = this.getView().byId("smartFilterBar");
+            var oFilterData = oSmartFilterBar.getFilterData();
+
+            var oGjahr = oFilterData.Gjahr.ranges[0].value1;
+
+            var aFilters = [];
+              if(P_Bukrs){
+                  aFilters.push(new Filter("Bukrs", FilterOperator.EQ, P_Bukrs));
+              }
+  
+              if(oGjahr){
+                  aFilters.push(new Filter("Gjahr", FilterOperator.EQ, oGjahr));
+              }
+
+              if(P_Period){
+                aFilters.push(new Filter("Zperiod", FilterOperator.EQ, P_Period));
+              }
+
+              if(KostlArr){
+                aFilters.push( new sap.ui.model.Filter({
+                    path: "Kostl",
+                    operator: sap.ui.model.FilterOperator.EQ,
+                    value1: KostlArr  // Pass the array directly
+                    }) );
+              }
+
+              this.callCostChartoData(aFilters);
+
+
+           
+		},
+
+		onValueHelpCancelPress: function () {
+			this._oVHD.close();
+		},
+
+		onValueHelpAfterClose: function () {
+			this._oVHD.destroy();
+		},
+
+        onFilterBarSearch: function (oEvent) {
+			var sSearchQuery = this._oBasicSearchField.getValue(),
+				aSelectionSet = oEvent.getParameter("selectionSet");
+
+			var aFilters = aSelectionSet.reduce(function (aResult, oControl) {
+				if (oControl.getValue()) {
+					aResult.push(new Filter({
+						path: oControl.getName(),
+						operator: FilterOperator.Contains,
+						value1: oControl.getValue()
+					}));
+				}
+
+				return aResult;
+			}, []);
+
+			aFilters.push(new Filter({
+				filters: [
+					new Filter({ path: "Kostl", operator: FilterOperator.Contains, value1: sSearchQuery }),
+					new Filter({ path: "Ltext", operator: FilterOperator.Contains, value1: sSearchQuery })
+				],
+				and: false
+			}));
+
+			this._filterTable(new Filter({
+				filters: aFilters,
+				and: true
+			}));
+		},
+        _filterTable: function (oFilter) {
+			var oVHD = this._oVHD;
+           
+			oVHD.getTableAsync().then(function (oTable) {
+               // debugger;
+				if (oTable.bindRows) {
+					oTable.getBinding("rows").filter(oFilter.aFilters[0].aFilters);
+				}
+				if (oTable.bindItems) {
+					oTable.getBinding("items").filter(oFilter.aFilters[0].aFilters);
+				}
+
+				// This method must be called after binding update of the table.
+				oVHD.update();
+			});
+		},
+       
+		
+        onCompanyCodeValueHelpRequest : function(oEvent){
+            
+            var that = this;
+
+            // Create a default token (assuming you are working with a CompanyCode for example)
+            var defaultToken = new sap.m.Token({
+                key: "3000", // Example key, replace with your actual default value
+                text: "Jay Finechem Pvt Ltd" // Example text for the token
+            });
+
+                   // Create a ValueHelpDialog instance
+                   var oValueHelpDialog = new ValueHelpDialog({
+                    title: "Select Company Code",
+                    supportRanges: true,
+                    key: "bukrs",
+                    descriptionKey: "butxt",
+                    
+                    ok: function (oEvent) {
+                        var aTokens = oEvent.getParameter("tokens");
+                        if (aTokens.length) {
+                            var sCompanyCode = aTokens[0].getKey();
+                            that.getView().byId("smartFilterBar").getControlByKey("Bukrs").setValue(sCompanyCode);
+                        }
+                        oValueHelpDialog.close();
+                    },
+    
+                    cancel: function () {
+                        oValueHelpDialog.close();
+                    },
+    
+                    afterClose: function () {
+                        oValueHelpDialog.destroy();
+                    }
+                });
+
+                
+
+                // Define the OData model to bind the dialog
+                var oModel = this.getOwnerComponent().getModel();
+                oValueHelpDialog.setModel(oModel);
+
+                    // Define the columns for the ValueHelpDialog
+                var oColModel = new JSONModel({
+                    cols: [
+                        { label: "Company Code", template: "bukrs" },
+                        { label: "Company Name", template: "butxt" }
+                    ]
+                });
+
+                oValueHelpDialog.getTable().setModel(oColModel, "columns");
+
+                // Bind rows to the OData entity set (e.g., BukrsoDataSet)
+                oValueHelpDialog.getTable().bindRows({
+                    path: "/BukrsoDataSet",
+                    parameters: {
+                        select: "bukrs,butxt"
+                    }
+                });
+                //debugger;
+                // Set the default token(s)
+                oValueHelpDialog.setTokens([defaultToken]);
+                // Create a FilterBar with a SearchField for search functionality
+            var oFilterBar = new FilterBar({
+                advancedMode: false,
+                search: function (oEvt) {
+                    var sQuery = oSearchField.getValue();
+                    that._applyFilters(oValueHelpDialog, sQuery);
+                }
+            });
+
+            // Add a SearchField to the FilterBar for basic search
+            var oSearchField = new SearchField({
+                placeholder: "Search by Company Code or Name",
+                liveChange: function (oEvent) {
+                    var sQuery = oEvent.getParameter("newValue");
+                    that._applyFilters(oValueHelpDialog, sQuery);
+                }
+            });
+
+            oFilterBar.setBasicSearch(oSearchField);
+            oValueHelpDialog.setFilterBar(oFilterBar);
+
+            // Attach the `selectionChange` event on the dialog's internal table to capture selection changes
+            oValueHelpDialog.getTable().attachRowSelectionChange(function(oEvent) {
+                var oSelectedItem = oEvent.getParameter("rowContext");
+                if (oSelectedItem) {
+                    // Access the selected item data if needed
+                    
+                    var oData = oSelectedItem.getObject();
+
+                    var selBukrs = oData.bukrs;
+                    var oSelect =  that.oView.byId("customSelect");
+                    // Retrieve the selected Period item (optional, if you need the text)
+                    var oSelectedItem = oSelect.getSelectedItem();
+                    var sSelectedPeriod = oSelectedItem ? oSelectedItem.getText() : null;
+         
+                    // Retrieve filter data
+                    var oSmartFilterBar = that.oView.byId("smartFilterBar");
+                    var oFilterData = oSmartFilterBar.getFilterData();
+                    
+                    var oGjahr   = oFilterData.Gjahr.ranges[0].value1;
+                    
+                    var aFilters = [];
+                    if(selBukrs){
+                        aFilters.push(new Filter("Bukrs", FilterOperator.EQ, selBukrs));
+                    }
+        
+                    if(oGjahr){
+                        aFilters.push(new Filter("Gjahr", FilterOperator.EQ, oGjahr));
+                    }
+      
+                    if(sSelectedPeriod){
+                      aFilters.push(new Filter("Zperiod", FilterOperator.EQ, sSelectedPeriod));
+                  }
+      
+                   
+                    that.callCashChartoData(aFilters);
+                    that.callCostChartoData(aFilters);
+                }
+            });
+            // Open the ValueHelpDialog
+            oValueHelpDialog.open();
+
+        },
+        _applyFilters: function (oValueHelpDialog, sQuery) {
+       
+            var aFilters = [];
+            if (sQuery) {
+                aFilters.push(new Filter("bukrs", FilterOperator.Contains, sQuery));
+                aFilters.push(new Filter("butxt", FilterOperator.Contains, sQuery));
+            }
+            var oBinding = oValueHelpDialog.getTable().getBinding("rows");
+            oBinding.filter(new Filter({ filters: aFilters, and: false }), "Application");
+
+            // Optional: Update the dialog to ensure the table reflects filters
+            oValueHelpDialog.update();
+        },
+
+        onHkontValueHelpRequested : function(oEvent){
+            
+            var oView = this.getView();
+            this._oBasicSearchField = new SearchField();
+           
+            this.loadFragment({
+				name: "glcostrept.glcostreport.fragments.hKontValueHelpDialog"
+			}).then(function(oDialog) {
+				var oFilterBar = oDialog.getFilterBar(), oColumnProductCode, oColumnProductName;
+				this._oVHD = oDialog;
+               
+				this.getView().addDependent(oDialog);
+
+				// Set key fields for filtering in the Define Conditions Tab
+				oDialog.setRangeKeyFields([{
+					label: "GL",
+					key: "SAKNR",
+					type: "string",
+					typeInstance: new TypeString({}, {
+						maxLength: 10
+					})
+			}]);
+
+            // Set Basic Search for FilterBar
+				oFilterBar.setFilterBarExpanded(false);
+				oFilterBar.setBasicSearch(this._oBasicSearchField);
+
+				// Trigger filter bar search when the basic search is fired
+				this._oBasicSearchField.attachSearch(function() {
+					oFilterBar.search();
+				});
+
+                oDialog.getTableAsync().then(function (oTable) {
+
+                    var oODataModel = this.getView().getModel();  
+					oTable.setModel(oODataModel);
+                   
+					// For Desktop and tabled the default table is sap.ui.table.Table
+					if (oTable.bindRows) {
+						// Bind rows to the ODataModel and add columns
+						oTable.bindAggregation("rows", {
+							path: "/GLAccDataSet",
+							events: {
+								dataReceived: function() {
+									oDialog.update();
+								}
+							}
+						});
+						oColumnProductCode = new UIColumn({label: new Label({text: "GL Account"}), template: new Text({wrapping: false, text: "{SAKNR}"})});
+						oColumnProductCode.data({
+							fieldName: "SAKNR"
+						});
+						oColumnProductName = new UIColumn({label: new Label({text: "Description"}), template: new Text({wrapping: false, text: "{MCOD1}"})});
+						oColumnProductName.data({
+							fieldName: "MCOD1"
+						});
+						oTable.addColumn(oColumnProductCode);
+						oTable.addColumn(oColumnProductName);
+					}
+
+					// For Mobile the default table is sap.m.Table
+					if (oTable.bindItems) {
+						// Bind items to the ODataModel and add columns
+						oTable.bindAggregation("items", {
+							path: "/GLAccDataSet",
+							template: new ColumnListItem({
+								cells: [new Label({text: "{SAKNR}"}), new Label({text: "{MCOD1}"})]
+							}),
+							events: {
+								dataReceived: function() {
+									oDialog.update();
+								}
+							}
+                    	});
+						oTable.addColumn(new MColumn({header: new Label({text: "GL Account"})}));
+						oTable.addColumn(new MColumn({header: new Label({text: "Description"})}));
+					}
+
+                    oDialog.update();
+				}.bind(this));
+                
+                oDialog.getTable().attachRowSelectionChange(function(oEvent) {
+                    var oSelectedItem = oEvent.getParameter("rowContext");
+                   
+                });
+                this._oMultiInput = this.getView().byId("hkontF4");
+                oDialog.setTokens(this._oMultiInput.getTokens());
+				oDialog.open();
+			}.bind(this));
+        },
+
+        onHkontValueHelpOkPress: function (oEvent) {
+			var aTokens = oEvent.getParameter("tokens");
+            this._oMultiInput = this.getView().byId("hkontF4");
+			this._oMultiInput.setTokens(aTokens);
+			this._oVHD.close();
+		},
+
+		onHkontValueHelpCancelPress: function () {
+			this._oVHD.close();
+		},
+
+		onHkontValueHelpAfterClose: function () {
+			this._oVHD.destroy();
+		},
+
+       
+
         callCashChartoData: function(aFilters){
 
             // pie chart
@@ -233,234 +852,7 @@ function (Controller,Filter,FilterOperator,MessageToast,SearchField,ValueHelpDia
          }
         },
 
-        onGLChartClick: function (oEvent) {
-           
-            var oData = oEvent.getParameter("data");
-
-            var selBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
-            var P_Bukrs = selBukrs.mProperties.key;
-
-            var selPeriod = this.getView().byId("customSelect").getSelectedItem();
-            var P_Period = selPeriod.mProperties.text;
-
-            var oSmartFilterBar = this.getView().byId("smartFilterBar");
-            var oFilterData = oSmartFilterBar.getFilterData();
-
-            var P_Gjahr = oFilterData.Gjahr.ranges[0].value1;
-
-            var P_Bukrs  = '1000';
-            var P_Gjahr  = '2020';
-            var P_Period = 'Yearly';
-
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-
-            oRouter.navTo("RouteGLSumView", {
-                Bukrs: P_Bukrs,
-                Gjahr: P_Gjahr,
-                Period:P_Period
-            });
-           
-        },
-        onExpChartClick : function(oEvent){
-            var oData = oEvent.getParameter("data");
-
-            var selBukrs = this.getView().byId("idBukrsSelect").getSelectedItem();
-            var P_Bukrs = selBukrs.mProperties.key;
-
-            var selPeriod = this.getView().byId("customSelect").getSelectedItem();
-            var P_Period = selPeriod.mProperties.text;
-
-            var oSmartFilterBar = this.getView().byId("smartFilterBar");
-            var oFilterData = oSmartFilterBar.getFilterData();
-
-            var P_Gjahr = oFilterData.Gjahr.ranges[0].value1;
-
-            var P_Bukrs  = '1000';
-            var P_Gjahr  = '2020';
-            var P_Period = 'Yearly';
-
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-
-            oRouter.navTo("RouteExpenSumView", {
-                Bukrs: P_Bukrs,
-                Gjahr: P_Gjahr,
-                Period:P_Period
-            });
-        },
-        onValueHelpRequest : function(oEvent)
-        {
-            var oInput = oEvent.getSource();
-            var oView = this.getView();
-
-            this._oBasicSearchField = new SearchField();
-            if (!this._oValueHelpDialog) {
-
-            this._oValueHelpDialog = new sap.ui.comp.valuehelpdialog.ValueHelpDialog("inputKostl",{
-                title: "Select Cost Center",
-                supportRanges: true,
-                key: "Kostl",
-                descriptionKey: "Ltext",
-                ok: function (oEvent) {
-                    var aTokens = oEvent.getParameter("tokens");
-                    
-                    oInput.setValue(aTokens[0].getText());
-                    this._oValueHelpDialog.close();
-                }.bind(this),
-                cancel: function () {
-                    sap.m.MessageToast.show("Cancel pressed!");
-                    this._oValueHelpDialog.close();
-                }.bind(this),
-                afterClose: function() {
-                    this._oValueHelpDialog.destroy();
-                }
-            });
-
-            // if (!this._pValueHelpDialog) {
-			// 	this._pValueHelpDialog = Fragment.load({
-			// 		id: oView.getId(),
-			// 		name: "glcostrept.glcostreport.fragments.ValueHelpDialog",
-			// 		controller: this
-			// 	}).then(function (oValueHelpDialog){
-			// 		oView.addDependent(oValueHelpDialog);
-			// 		return oValueHelpDialog;
-			// 	});
-			// }
-			// this._pValueHelpDialog.then(function(oValueHelpDialog){
-			// 	this._configValueHelpDialog();
-			// 	oValueHelpDialog.open();
-			// }.bind(this));
-        }
-
-            var oColModel = new JSONModel({
-                cols: [
-                    { label: "Cost Center", template: "Kostl" },  
-                    { label: "Description", template: "Ltext" }   
-                ]
-            });
-
-           var of4Table = this._oValueHelpDialog.getTable();
-            of4Table.setModel(oColModel,"columns");
-
-            // Set the OData model for the dialog's table
-            var oODataModel = this.getView().getModel();  // Assuming OData model is set on the view
-            this._oValueHelpDialog.getTable().setModel(oODataModel);
-            //debugger;
-            // Bind the rows of the table to the OData entity set (e.g., "CompanyCodeSet")
-            this._oValueHelpDialog.getTable().bindRows("/CostCenterDataSet");
-           
-            this._oValueHelpDialog.setRangeKeyFields([ {label:"Cost Center", Key:"Kostl"},{label:"Description", key:"Ltext"}]);
-           
-           
-            
-            if (of4Table.bindRows) {
-               // of4Table.addColumn(oColModel);
-                of4Table.bindAggregation("rows", "/CostCenterDataSet");
-            }
-
-            var oFilterBar = new sap.ui.comp.filterbar.FilterBar({
-                advancedMode:  true,
-			    filterBarExpanded: false,
-            });
-            
-        this._oValueHelpDialog.open();
-            
-        },
-        // _configValueHelpDialog: function () {
-        //     debugger;
-        //     this.oODataModel1 = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZJI_FI_CASH_ODATA1_SRV/");
-        //     var sInputValue = this.byId("inputFieldWithF4").getValue(),
-        //     oModel = this.getOwnerComponent().getModel(this.oODataModel1 );
-        //     aProducts = oModel.getProperty("/CostCenterDataSet");
-           
-        // aProducts.forEach(function (oProduct) {
-        //     oProduct.selected = (oProduct.Name === sInputValue);
-        // });
-        // oModel.setProperty("/CostCenterDataSet", aProducts);
-        // }
-
-        // #region Whitespace value help
-		onWhitespaceVHRequested: function() {
-			var oTextTemplate = new Text({text: {path: 'SAKNR'}, renderWhitespace: true});
-			this._oBasicSearchField = new SearchField({
-				search: function() {
-					this.oWhitespaceDialog.getFilterBar().search();
-				}.bind(this)
-			});
-
-			this.pWhitespaceDialog = this.loadFragment({
-				name: "glcostrept.glcostreport.fragments.ValueHelpDialog"
-			}).then(function(oWhitespaceDialog) {
-				var oFilterBar = oWhitespaceDialog.getFilterBar(), oColumnProductCode, oColumnProductName;
-				this.oWhitespaceDialog = oWhitespaceDialog;
-
-				this.getView().addDependent(oWhitespaceDialog);
-
-				// Set key fields for filtering in the Define Conditions Tab
-				oWhitespaceDialog.setRangeKeyFields([{
-					label: "Product Code",
-					key: "SAKNR",
-					type: "string",
-					typeInstance: new TypeString({}, {
-						maxLength: 10
-					})
-				}]);
-
-				// Set Basic Search for FilterBar
-				oFilterBar.setFilterBarExpanded(false);
-				oFilterBar.setBasicSearch(this._oBasicSearchField);
-
-				// Re-map whitespaces
-				oFilterBar.determineFilterItemByName("SAKNR").getControl().setTextFormatter(this._inputTextFormatter);
-
-				oWhitespaceDialog.getTableAsync().then(function (oTable) {
-					oTable.setModel(this.oModel);
-
-					// For Desktop and tabled the default table is sap.ui.table.Table
-					if (oTable.bindRows) {
-						oColumnProductCode = new UIColumn({label: new Label({text: "Product Code"}), template: oTextTemplate});
-						oColumnProductCode.data({
-							fieldName: "SAKNR"
-						});
-						oTable.addColumn(oColumnProductCode);
-
-						oColumnProductName = new UIColumn({label: new Label({text: "Product Name"}), template: new Text({wrapping: false, text: "{ProductName}"})});
-						oColumnProductName.data({
-							fieldName: "MCOD1"
-						});
-						oTable.addColumn(oColumnProductName);
-						oTable.bindAggregation("rows", {
-							path: "/GLAccDataSet",
-							events: {
-								dataReceived: function() {
-									oWhitespaceDialog.update();
-								}
-							}
-						});
-					}
-
-					// For Mobile the default table is sap.m.Table
-					if (oTable.bindItems) {
-						oTable.addColumn(new MColumn({header: new Label({text: "Product Code"})}));
-						oTable.addColumn(new MColumn({header: new Label({text: "Product Name"})}));
-						oTable.bindItems({
-							path: "/GLAccDataSet",
-							template: new ColumnListItem({
-								cells: [new Label({text: "{SAKNR}"}), new Label({text: "{MCOD1}"})]
-							}),
-							events: {
-								dataReceived: function() {
-									oWhitespaceDialog.update();
-								}
-							}
-						});
-					}
-
-					oWhitespaceDialog.update();
-				}.bind(this));
-
-				oWhitespaceDialog.setTokens(this._oWhiteSpacesInput.getTokens());
-				oWhitespaceDialog.open();
-			}.bind(this));
-		},
+        
+		
     });
 });
